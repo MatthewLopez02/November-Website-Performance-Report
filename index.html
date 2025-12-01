@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>MyBambu Website Performance Report | Oct-Nov 2025</title>
+
+    <!--
+    ═══════════════════════════════════════════════════════════════════════════════
+    MYBAMBU WEBSITE PERFORMANCE REPORT
+    Reporting Period: October 1 - November 30, 2025
+    Generated: December 1, 2025
+
+    ORIGINAL PROMPT:
+    User requested a new website performance report for November 2025, visually
+    identical to the September-October 2025 report. The report should cover
+    Oct 1 - Nov 30, 2025, with October as comparison and November as focus.
+    Key date markers on Oct 7 and Oct 15 for campaign shutoffs should be retained.
+
+    DATA SOURCES:
+    1. Google Analytics 4 (GA4) - Daily metrics, events, device data
+    2. Looker Studio - Organic & Paid traffic reports
+
+    DATA FILES USED:
+    - Nov 3.csv: Daily sessions and users (Oct 1 - Nov 30, 2025)
+    - Nov 5.csv: Channel grouping with sessions and users
+    - Nov 7.csv: Device category breakdown (mobile/tablet/desktop/smart tv)
+    - download (8).csv: Operating system distribution with bounce/engagement rates
+    - download (9).csv: Top pages with views, engagement, bounce rate
+    - Nov 9.csv: Source/medium traffic breakdown (265 sources)
+    - Nov 8.csv: Button click events (69 event types)
+    - Nov 10.csv: Campaign performance data (310 campaigns)
+    - download (10).csv: Daily metrics including views, events, bounce, engagement
+    - Nov Paid Landing Pages Data.csv: Paid landing page sessions by date
+
+    METHODOLOGY:
+    - Data comparison: October 2025 vs November 2025
+    - Key date markers: Oct 7 (Apple/Meta/TikTok off), Oct 15 (Google off)
+    - Metrics tracked: Sessions, users, bounce rate, engagement, traffic sources
+    - All data filtered to Oct 1 - Nov 30, 2025 period
+
+    CALCULATIONS:
+    - October 2025 Totals: Sum of daily metrics from Oct 1-31
+    - November 2025 Totals: Sum of daily metrics from Nov 1-30
+    - Month-over-month change: ((Nov - Oct) / Oct) * 100
+    - Traffic source percentages: (source sessions / total sessions) * 100
+
+    DATA PROCESSING NOTES:
+    - Daily data from download (10).csv used for engagement/bounce trends
+    - Channel data from Nov 5.csv for traffic source distribution
+    - Device data from Nov 7.csv for device pie chart
+    - OS data from download (8).csv for operating system distribution
+    - Top pages from download (9).csv (first 100 rows read)
+    - Button clicks from Nov 8.csv for interaction tracking
+    - Campaign data from Nov 10.csv for marketing performance
+    - Paid landing pages from Nov Paid Landing Pages Data.csv
+
+    OCTOBER 2025 METRICS (calculated from data):
+    - Total Sessions: 175,628
+    - Total Users: 153,758
+    - Total Views: 430,006
+    - Total Events: 846,486
+    - Avg Bounce Rate: 8.0%
+    - Avg Engagement Rate: 92.0%
+
+    NOVEMBER 2025 METRICS (calculated from data):
+    - Total Sessions: 64,753
+    - Total Users: 55,783
+    - Total Views: 203,125
+    - Total Events: 406,965
+    - Avg Bounce Rate: 4.7% (excluding Nov 30 anomaly)
+    - Avg Engagement Rate: 95.3%
+
+    NOTE: Nov 30 shows anomalous bounce rate (99.4%) - likely data issue
+
+    QUERY LOGIC:
+    - All metrics aggregated by summing daily values
+    - Percentages calculated as proportions of totals
+    - Comparisons show % change from October to November
+    ═══════════════════════════════════════════════════════════════════════════════
+    -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0052CC;
+            --secondary-blue: #0065FF;
+            --light-blue: #4C9AFF;
+            --accent-purple: #6554C0;
+            --success-green: #36B37E;
+            --warning-orange: #FF991F;
+            --danger-red: #FF5630;
+            --dark-bg: #0B1120;
+            --card-bg: #151C2E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3BAC5;
+            --border-color: #2D3748;
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102,126,234,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(118,75,162,0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 2px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .report-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .summary-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--light-blue);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .summary-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .card-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .card-change.positive {
+            background: rgba(54, 179, 126, 0.15);
+            color: var(--success-green);
+        }
+
+        .card-change.negative {
+            background: rgba(255, 86, 48, 0.15);
+            color: var(--danger-red);
+        }
+
+        .card-change.neutral {
+            background: rgba(179, 186, 197, 0.15);
+            color: var(--text-secondary);
+        }
+
+        /* Chart Section */
+        .chart-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .btn.active {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-color: transparent;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        .chart-wrapper.large {
+            height: 500px;
+        }
+
+        /* Grid Layout for Charts */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Insights Section */
+        .insights-section {
+            background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+        }
+
+        .insights-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .insight-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .insight-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .insight-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .insight-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .insight-highlight {
+            color: var(--light-blue);
+            font-weight: 600;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table thead {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            color: var(--text-secondary);
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* Timeline Markers */
+        .timeline-marker {
+            position: absolute;
+            width: 2px;
+            background: var(--danger-red);
+            top: 0;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        .timeline-label {
+            position: absolute;
+            background: var(--danger-red);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+            transform: translateX(-50%);
+            top: -25px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-wrapper {
+                height: 300px;
+            }
+
+            .report-meta {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .loading {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MyBambu Website Performance Report</h1>
+            <p class="subtitle">Comprehensive Analysis: October - November 2025</p>
+            <div class="report-meta">
+                <div class="meta-item">
+                    <span>Period: Oct 1 - Nov 30, 2025</span>
+                </div>
+                <div class="meta-item">
+                    <span>Focus: Post-Campaign Performance Analysis</span>
+                </div>
+                <div class="meta-item">
+                    <span>Data Sources: GA4 &amp; Looker Studio</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- October Summary Cards -->
+        <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 30px; color: var(--text-primary);">October 2025 Metrics</h2>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="card-label">Total Sessions</div>
+                <div class="card-value">175.6K</div>
+                <span class="card-change neutral">October Only</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Total Users</div>
+                <div class="card-value">153.8K</div>
+                <span class="card-change neutral">October Only</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Avg Bounce Rate</div>
+                <div class="card-value">8.0%</div>
+                <span class="card-change positive">Low &amp; Good</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Engagement Rate</div>
+                <div class="card-value">92.0%</div>
+                <span class="card-change positive">Very High</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Page Views</div>
+                <div class="card-value">430.0K</div>
+                <span class="card-change neutral">Web Only</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Total Events</div>
+                <div class="card-value">846.5K</div>
+                <span class="card-change neutral">Web Only</span>
+            </div>
+        </div>
+
+        <!-- November Summary Cards -->
+        <h2 style="font-size: 1.8rem; font-weight: 700; margin: 60px 0 30px 0; color: var(--text-primary);">November 2025 Metrics</h2>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="card-label">Total Sessions</div>
+                <div class="card-value">64.8K</div>
+                <span class="card-change negative">-63.1% vs Oct</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Total Users</div>
+                <div class="card-value">55.8K</div>
+                <span class="card-change negative">-63.7% vs Oct</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Avg Bounce Rate</div>
+                <div class="card-value">3.5%</div>
+                <span class="card-change positive">Improved</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Engagement Rate</div>
+                <div class="card-value">96.5%</div>
+                <span class="card-change positive">Higher Quality</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Page Views</div>
+                <div class="card-value">203.1K</div>
+                <span class="card-change negative">-52.8% vs Oct</span>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-label">Total Events</div>
+                <div class="card-value">407.0K</div>
+                <span class="card-change negative">-51.9% vs Oct</span>
+            </div>
+        </div>
+
+        <!-- Daily Traffic Timeline -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Daily Traffic Timeline</h2>
+                    <p class="section-subtitle">Sessions and users throughout the reporting period with campaign milestones</p>
+                </div>
+                <div class="chart-controls">
+                    <button class="btn active" onclick="updateTimelineView('both')">Both</button>
+                    <button class="btn" onclick="updateTimelineView('sessions')">Sessions</button>
+                    <button class="btn" onclick="updateTimelineView('users')">Users</button>
+                </div>
+            </div>
+            <div class="chart-wrapper large">
+                <canvas id="dailyTrafficChart"></canvas>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 3px; height: 30px; background: #FF5630; border-radius: 2px;"></div>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Oct 7: Apple/Meta/TikTok Campaigns Off</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 3px; height: 30px; background: #FF991F; border-radius: 2px;"></div>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Oct 15: Google Campaigns Off</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Traffic Sources & Devices Grid -->
+        <div class="chart-grid">
+            <div class="chart-section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Traffic Sources</h2>
+                        <p class="section-subtitle">Sessions by channel (Oct-Nov 2025)</p>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="trafficSourcesChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Device Distribution</h2>
+                        <p class="section-subtitle">Sessions by device type (Oct-Nov 2025)</p>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="deviceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operating System Distribution -->
+        <div class="chart-section" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Operating System Distribution</h2>
+                    <p class="section-subtitle">Users by operating system (Oct-Nov 2025)</p>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="osChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Engagement Metrics -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Engagement &amp; Bounce Rate Trends</h2>
+                    <p class="section-subtitle">How user engagement changed throughout the period</p>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="engagementChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Paid Landing Pages Traffic -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Paid Landing Pages Traffic</h2>
+                    <p class="section-subtitle">Daily visits to paid advertising landing pages</p>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="paidLandingsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Key Insights -->
+        <div class="insights-section">
+            <h2 class="insights-title">Key Insights &amp; Findings</h2>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon"></div>
+                    <h3 class="insight-title">Post-Campaign Traffic Stabilization</h3>
+                    <p class="insight-text">
+                        After the dramatic traffic drop in early October (from <span class="insight-highlight">~19K to ~2K daily sessions</span>),
+                        November showed stable organic traffic averaging <span class="insight-highlight">2,100 sessions/day</span>.
+                        This represents the true organic baseline without paid advertising.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon"></div>
+                    <h3 class="insight-title">Exceptional Engagement Quality</h3>
+                    <p class="insight-text">
+                        November's engagement rate reached <span class="insight-highlight">96.5%</span> with bounce rates
+                        as low as <span class="insight-highlight">2.5-4%</span>. This indicates organic traffic is
+                        highly qualified and genuinely interested in MyBambu services.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon"></div>
+                    <h3 class="insight-title">Mobile-First Audience</h3>
+                    <p class="insight-text">
+                        Mobile devices dominate with <span class="insight-highlight">85.2%</span> of all sessions (204.7K).
+                        Android leads with <span class="insight-highlight">52.0%</span> of users, followed by iOS at
+                        <span class="insight-highlight">45.3%</span>, reflecting the target demographic.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon"></div>
+                    <h3 class="insight-title">Organic Social Dominance</h3>
+                    <p class="insight-text">
+                        <span class="insight-highlight">Organic Social</span> leads all channels with 78.3K sessions (31.2%),
+                        driven primarily by TikTok traffic. <span class="insight-highlight">Direct traffic</span> follows
+                        at 59.9K (23.9%), showing strong brand awareness.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon"></div>
+                    <h3 class="insight-title">TikTok as Primary Driver</h3>
+                    <p class="insight-text">
+                        TikTok traffic contributed <span class="insight-highlight">48.7K sessions</span> (19.4% of total),
+                        making it the single largest identified traffic source. This organic social presence
+                        continues to drive awareness without paid spend.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon"></div>
+                    <h3 class="insight-title">Paid Landing Pages Decline</h3>
+                    <p class="insight-text">
+                        Paid landing pages saw minimal traffic post-campaign shutdown. The
+                        <span class="insight-highlight">Tarjeta (Card)</span> and <span class="insight-highlight">Recompensas</span>
+                        pages dropped to zero after Oct 7, with only IMT pages showing residual visits.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon"></div>
+                    <h3 class="insight-title">Email Channel Performance</h3>
+                    <p class="insight-text">
+                        Email marketing drove <span class="insight-highlight">34.2K sessions</span> (13.7%), with SFMC
+                        contributing 22.3K and Insider adding 11.3K. Email remains a critical retention channel
+                        for engaging existing users.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon"></div>
+                    <h3 class="insight-title">Strong SEO Foundation</h3>
+                    <p class="insight-text">
+                        <span class="insight-highlight">Organic Search</span> contributed 46.9K sessions (18.7%),
+                        primarily from Google (45.7K). This organic search presence provides sustainable
+                        traffic independent of paid advertising.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Pages Performance -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Top Performing Pages</h2>
+                    <p class="section-subtitle">Most viewed website sections with engagement metrics</p>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Page Path</th>
+                        <th>Views</th>
+                        <th>Users</th>
+                        <th>Avg. Engagement (sec)</th>
+                        <th>Bounce Rate</th>
+                    </tr>
+                </thead>
+                <tbody id="topPagesTable">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Traffic Source Details -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Detailed Traffic Sources</h2>
+                    <p class="section-subtitle">Top 15 source/medium combinations</p>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Source / Medium</th>
+                        <th>Sessions</th>
+                        <th>% of Total</th>
+                    </tr>
+                </thead>
+                <tbody id="trafficSourceTable">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Device Performance -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Top Devices &amp; Models</h2>
+                    <p class="section-subtitle">Most common devices accessing mybambu.com</p>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Device Model</th>
+                        <th>Brand</th>
+                        <th>Sessions</th>
+                        <th>Users</th>
+                    </tr>
+                </thead>
+                <tbody id="devicesTable">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Most Clicked Buttons -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Most Clicked Buttons</h2>
+                    <p class="section-subtitle">User interaction events tracked on website</p>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Button Event Name</th>
+                        <th>Users</th>
+                        <th>Total Events</th>
+                    </tr>
+                </thead>
+                <tbody id="buttonClicksTable">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Campaign Performance -->
+        <div class="chart-section">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Top Marketing Campaigns</h2>
+                    <p class="section-subtitle">Performance of tracked campaigns</p>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Campaign Name</th>
+                        <th>Sessions</th>
+                        <th>Users</th>
+                        <th>Conversion Rate</th>
+                    </tr>
+                </thead>
+                <tbody id="campaignsTable">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>MyBambu Website Performance Report | Paid Ads Team</p>
+        <p style="margin-top: 10px; font-size: 0.85rem;">
+            Data sources: Google Analytics 4, Looker Studio | Report Period: October 1 - November 30, 2025
+        </p>
+    </footer>
+
+    <script>
+        // DATA - All metrics from CSV files
+        // Source: Nov 3.csv - Daily sessions and users (Oct 1 - Nov 30, 2025)
+        const dailyData = {
+            dates: ["Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7","Oct 8","Oct 9","Oct 10","Oct 11","Oct 12","Oct 13","Oct 14","Oct 15","Oct 16","Oct 17","Oct 18","Oct 19","Oct 20","Oct 21","Oct 22","Oct 23","Oct 24","Oct 25","Oct 26","Oct 27","Oct 28","Oct 29","Oct 30","Oct 31","Nov 1","Nov 2","Nov 3","Nov 4","Nov 5","Nov 6","Nov 7","Nov 8","Nov 9","Nov 10","Nov 11","Nov 12","Nov 13","Nov 14","Nov 15","Nov 16","Nov 17","Nov 18","Nov 19","Nov 20","Nov 21","Nov 22","Nov 23","Nov 24","Nov 25","Nov 26","Nov 27","Nov 28","Nov 29","Nov 30"],
+            sessions: [18873,16980,16897,16751,18469,10682,3982,3574,3042,3040,2751,2352,2748,2607,2676,2701,2635,2373,2126,2616,2207,2216,8533,8134,3234,2488,2706,2498,2420,2119,1998,1846,1774,2068,2202,2150,1978,2010,1940,1841,2016,1724,1872,2067,1784,2535,1821,2186,1883,2967,2450,2389,2216,1987,2628,2757,2729,1870,1974,1682,1411],
+            users: [17780,16085,16377,16167,17722,9530,3266,2953,2491,2513,2284,1983,2241,2140,2201,2189,2189,2015,1812,2154,1841,1855,7926,7283,2679,2226,2297,2103,2094,1827,1719,1585,1570,1747,1872,1842,1639,1709,1639,1577,1712,1505,1599,1798,1552,2303,1645,1906,1618,2561,2086,2009,1928,1704,2159,2298,2267,1596,1639,1428,1210]
+        };
+
+        // Source: Nov 5.csv - Channel grouping
+        const channelData = {
+            labels: ['Organic Social', 'Direct', 'Organic Search', 'Email', 'Referral', 'Paid Search', 'Unassigned', 'Other'],
+            sessions: [78267, 59897, 46927, 34241, 16503, 8606, 4947, 1652]
+        };
+
+        // Source: Nov 7.csv - Device categories
+        const deviceData = {
+            labels: ['Mobile', 'Desktop', 'Tablet', 'Smart TV'],
+            sessions: [204695, 27460, 8114, 2]
+        };
+
+        // Source: download (8).csv - Operating system distribution by users
+        const osData = {
+            labels: ['Android', 'iOS', 'Windows', 'Macintosh', 'Linux', 'Other'],
+            users: [342150, 291272, 15516, 2250, 1423, 23917]
+        };
+
+        // Source: download (9).csv - Top pages with engagement
+        const topPages = [
+            {page: '/en/', views: 88467, users: 23625, engagement: 19.37, bounce: 4.48},
+            {page: '/es/transferencias-de-dinero-internacional/', views: 47828, users: 14309, engagement: 15.25, bounce: 3.80},
+            {page: '/es/', views: 36345, users: 11938, engagement: 17.31, bounce: 7.40},
+            {page: '/es/agrega-dinero/', views: 21436, users: 5486, engagement: 7.44, bounce: 2.90},
+            {page: '/en/contact-customer-support/', views: 19033, users: 5798, engagement: 33.88, bounce: 4.28},
+            {page: '/es/aviso/', views: 17528, users: 7141, engagement: 56.34, bounce: 1.32},
+            {page: '/en/cashloads/', views: 16562, users: 4584, engagement: 7.21, bounce: 2.80},
+            {page: '/es/servicio-al-cliente/', views: 14517, users: 5009, engagement: 18.43, bounce: 3.46},
+            {page: '/en/mybambu-visa-debit-card/', views: 13382, users: 4773, engagement: 23.68, bounce: 2.40},
+            {page: '/en/enbambupay/', views: 10652, users: 3394, engagement: 15.40, bounce: 2.86}
+        ];
+
+        // Source: Nov 9.csv - Traffic sources
+        const trafficSources = [
+            {source: '(direct) / (none)', sessions: 59897},
+            {source: 'tiktok / traffic', sessions: 48668},
+            {source: 'google / organic', sessions: 45672},
+            {source: 'meta / traffic', sessions: 26026},
+            {source: 'sfmc / email', sessions: 22272},
+            {source: 'insider / email', sessions: 11294},
+            {source: 'bambusystems.my.site.com / referral', sessions: 10641},
+            {source: 'google / cpc', sessions: 9605},
+            {source: 'insider / architect_email', sessions: 4510},
+            {source: 'lacpayments.sharepoint.com / referral', sessions: 1831},
+            {source: 'webto.salesforce.com / referral', sessions: 1489},
+            {source: 'bing / organic', sessions: 1217},
+            {source: 'm.facebook.com / referral', sessions: 835},
+            {source: 'bambusystems.lightning.force.com / referral', sessions: 794},
+            {source: 'facebook.com / referral', sessions: 707}
+        ];
+
+        // Source: Nov 8.csv - Button clicks (top 10)
+        const buttonClicks = {
+            labels: ['descargaLaAppHeader', 'createAccountHome', 'getStartedVisaCard', 'downloadAppHeader', 'video_start', 'video_progress', 'comienzaAhoraTrans', 'rewardsEN', 'video_complete', 'requestBambuPay'],
+            users: [3835, 5259, 2217, 2147, 1686, 1571, 1454, 838, 816, 688],
+            events: [5142, 8317, 5436, 2228, 2155, 6667, 2453, 1288, 1000, 2596]
+        };
+
+        // Source: Nov 10.csv - Campaigns (top 10)
+        const topCampaigns = [
+            {campaign: '(direct)', sessions: 59897, users: 40306, conversion: 67.3},
+            {campaign: '(organic)', sessions: 46886, users: 30305, conversion: 64.6},
+            {campaign: 'colombia', sessions: 38914, users: 36113, conversion: 92.8},
+            {campaign: 'mexico', sessions: 24976, users: 24913, conversion: 99.7},
+            {campaign: '(referral)', sessions: 19600, users: 9453, conversion: 48.2},
+            {campaign: 'ESP_Notice DDA Greendot 10.23', sessions: 13635, users: 9712, conversion: 71.2},
+            {campaign: 'moneygram', sessions: 10522, users: 10080, conversion: 95.8},
+            {campaign: 'ENG_Notice 10.23', sessions: 7584, users: 5558, conversion: 73.3},
+            {campaign: 'SEM - CATEGORY - SPANISH ENGLISH', sessions: 3311, users: 2256, conversion: 68.1},
+            {campaign: 'SEM_ESP_BRAND_Bambu_USA_NEW', sessions: 2762, users: 1056, conversion: 38.2}
+        ];
+
+        // Source: Nov Paid Landing Pages Data.csv - Paid landing pages daily traffic
+        const paidLandingsData = {
+            dates: ["Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7","Oct 8","Oct 9","Oct 10","Oct 11","Oct 12","Oct 13","Oct 14","Oct 15","Oct 16","Oct 17","Oct 18","Oct 19","Oct 20","Oct 21","Oct 22","Oct 23","Oct 24","Oct 25","Oct 26","Oct 27","Oct 28","Oct 29","Oct 30","Oct 31","Nov 1","Nov 2","Nov 3","Nov 4","Nov 5","Nov 6","Nov 7","Nov 8","Nov 9","Nov 10","Nov 11","Nov 12","Nov 13","Nov 14","Nov 15","Nov 16","Nov 17","Nov 18","Nov 19","Nov 20","Nov 21","Nov 22","Nov 23","Nov 24","Nov 25","Nov 26","Nov 27","Nov 28","Nov 29","Nov 30"],
+            tarjeta: [5,6,5,7,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            recompensas: [1,1,2,3,4,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            imt: [0,0,1,2,2,0,0,1,0,0,0,0,0,4,1,1,0,1,0,0,1,1,0,1,1,0,1,1,0,1,1,3,0,0,0,0,0,5,1,1,0,2,0,1,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,1],
+            promociones: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        };
+
+        // Source: download (10).csv - Engagement and bounce rate data (sorted by date)
+        const engagementData = {
+            dates: ["Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7","Oct 8","Oct 9","Oct 10","Oct 11","Oct 12","Oct 13","Oct 14","Oct 15","Oct 16","Oct 17","Oct 18","Oct 19","Oct 20","Oct 21","Oct 22","Oct 23","Oct 24","Oct 25","Oct 26","Oct 27","Oct 28","Oct 29","Oct 30","Oct 31","Nov 1","Nov 2","Nov 3","Nov 4","Nov 5","Nov 6","Nov 7","Nov 8","Nov 9","Nov 10","Nov 11","Nov 12","Nov 13","Nov 14","Nov 15","Nov 16","Nov 17","Nov 18","Nov 19","Nov 20","Nov 21","Nov 22","Nov 23","Nov 24","Nov 25","Nov 26","Nov 27","Nov 28","Nov 29","Nov 30"],
+            engagement: [93.48,92.80,91.29,92.92,94.90,93.91,85.96,84.12,84.35,80.45,82.36,81.29,82.69,81.97,91.74,94.30,95.54,96.16,96.68,95.22,95.68,95.58,98.46,97.80,96.32,97.21,95.79,96.28,96.24,95.78,94.71,97.30,97.08,96.30,95.88,96.43,95.15,95.97,97.16,97.50,96.18,96.70,96.48,96.62,96.42,97.60,97.47,96.62,95.92,96.36,96.78,95.98,97.11,97.38,96.50,95.76,96.85,97.27,95.85,96.43,0.57],
+            bounce: [6.52,7.20,8.71,7.08,5.10,6.09,14.04,15.88,15.65,19.55,17.64,18.71,17.31,18.03,8.26,5.70,4.46,3.84,3.32,4.78,4.32,4.42,1.54,2.20,3.68,2.79,4.21,3.72,3.76,4.22,5.29,2.70,2.92,3.70,4.12,3.57,4.85,4.03,2.84,2.50,3.82,3.30,3.52,3.38,3.58,2.40,2.53,3.38,4.08,3.64,3.22,4.02,2.89,2.62,3.50,4.24,3.15,2.73,4.15,3.57,99.43]
+        };
+
+        // Chart configurations
+        Chart.defaults.color = '#B3BAC5';
+        Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        Chart.defaults.borderColor = 'rgba(45, 55, 72, 0.3)';
+
+        // Register annotation plugin
+        Chart.register(window['chartjs-plugin-annotation']);
+
+        // Timeline Chart
+        const timelineCtx = document.getElementById('dailyTrafficChart').getContext('2d');
+        const timelineChart = new Chart(timelineCtx, {
+            type: 'line',
+            data: {
+                labels: dailyData.dates,
+                datasets: [{
+                    label: 'Sessions',
+                    data: dailyData.sessions,
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }, {
+                    label: 'Users',
+                    data: dailyData.users,
+                    borderColor: '#764ba2',
+                    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {size: 13, weight: '600'},
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(21, 28, 46, 0.95)',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#B3BAC5',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString();
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            oct7Line: {
+                                type: 'line',
+                                xMin: 6,
+                                xMax: 6,
+                                yMin: 0,
+                                yMax: 20000,
+                                borderColor: '#FF5630',
+                                borderWidth: 3,
+                                borderDash: [8, 4],
+                                label: {
+                                    display: true,
+                                    content: 'Oct 7: Apple/Meta/TikTok Off',
+                                    position: 'end',
+                                    yAdjust: 10,
+                                    backgroundColor: '#FF5630',
+                                    color: '#FFFFFF',
+                                    font: {
+                                        size: 11,
+                                        weight: 'bold'
+                                    },
+                                    padding: 8,
+                                    borderRadius: 4
+                                }
+                            },
+                            oct15Line: {
+                                type: 'line',
+                                xMin: 14,
+                                xMax: 14,
+                                yMin: 0,
+                                yMax: 20000,
+                                borderColor: '#FF991F',
+                                borderWidth: 3,
+                                borderDash: [8, 4],
+                                label: {
+                                    display: true,
+                                    content: 'Oct 15: Google Off',
+                                    position: 'end',
+                                    yAdjust: 10,
+                                    backgroundColor: '#FF991F',
+                                    color: '#FFFFFF',
+                                    font: {
+                                        size: 11,
+                                        weight: 'bold'
+                                    },
+                                    padding: 8,
+                                    borderRadius: 4
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {color: 'rgba(45, 55, 72, 0.3)'},
+                        ticks: {
+                            color: '#B3BAC5',
+                            callback: function(value) {
+                                return (value / 1000).toFixed(0) + 'K';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {color: 'rgba(45, 55, 72, 0.3)'},
+                        ticks: {
+                            color: '#B3BAC5',
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+
+        // Traffic Sources Chart (Doughnut)
+        const sourcesCtx = document.getElementById('trafficSourcesChart').getContext('2d');
+        const sourcesChart = new Chart(sourcesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: channelData.labels,
+                datasets: [{
+                    data: channelData.sessions,
+                    backgroundColor: [
+                        '#667eea',
+                        '#764ba2',
+                        '#4C9AFF',
+                        '#36B37E',
+                        '#FF991F',
+                        '#6554C0',
+                        '#FF5630',
+                        '#B3BAC5'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {size: 12},
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(21, 28, 46, 0.95)',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#B3BAC5',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed.toLocaleString() + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Device Chart (Pie)
+        const deviceCtx = document.getElementById('deviceChart').getContext('2d');
+        const deviceChart = new Chart(deviceCtx, {
+            type: 'pie',
+            data: {
+                labels: deviceData.labels,
+                datasets: [{
+                    data: deviceData.sessions,
+                    backgroundColor: ['#667eea', '#764ba2', '#4C9AFF', '#36B37E'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {size: 12},
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(21, 28, 46, 0.95)',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#B3BAC5',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed.toLocaleString() + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Operating System Chart (Pie)
+        const osCtx = document.getElementById('osChart').getContext('2d');
+        const osChart = new Chart(osCtx, {
+            type: 'pie',
+            data: {
+                labels: osData.labels,
+                datasets: [{
+                    data: osData.users,
+                    backgroundColor: ['#36B37E', '#667eea', '#FF991F', '#764ba2', '#6554C0', '#B3BAC5'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {size: 12},
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(21, 28, 46, 0.95)',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#B3BAC5',
+                        borderColor: '#667eea',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed.toLocaleString() + ' users (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Engagement Chart (Line)
+        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+        const engagementChart = new Chart(engagementCtx, {
+            type: 'line',
+            data: {
+                labels: engagementData.dates,
+                datasets: [{
+                    label: 'Engagement Rate (%)',
+                    data: engagementData.engagement,
+                    borderColor: '#36B37E',
+                    backgroundColor: 'rgba(54, 179, 126, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y'
+                }, {
+                    label: 'Bounce Rate (%)',
+                    data: engagementData.bounce,
+                    borderColor: '#FF5630',
+                    backgroundColor: 'rgba(255, 86, 48, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {size: 13, weight: '600'},
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(21, 28, 46, 0.95)',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#B3BAC5',
+                        borderColor: '#36B37E',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        position: 'left',
+                        min: 0,
+                        max: 100,
+                        grid: {color: 'rgba(45, 55, 72, 0.3)'},
+                        ticks: {
+                            color: '#B3BAC5',
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {color: 'rgba(45, 55, 72, 0.3)'},
+                        ticks: {
+                            color: '#B3BAC5',
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+
+        // Paid Landing Pages Traffic Chart
+        const paidLandingsCtx = document.getElementById('paidLandingsChart').getContext('2d');
+        const paidLandingsChart = new Chart(paidLandingsCtx, {
+            type: 'line',
+            data: {
+                labels: paidLandingsData.dates,
+                datasets: [
+                    {
+                        label: 'Tarjeta (Card)',
+                        data: paidLandingsData.tarjeta,
+                        borderColor: '#4C9AFF',
+                        backgroundColor: 'rgba(76, 154, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'Recompensas (Rewards)',
+                        data: paidLandingsData.recompensas,
+                        borderColor: '#36B37E',
+                        backgroundColor: 'rgba(54, 179, 126, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'IMT (International Money Transfer)',
+                        data: paidLandingsData.imt,
+                        borderColor: '#FFAB00',
+                        backgroundColor: 'rgba(255, 171, 0, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: 'Promociones (Promotions)',
+                        data: paidLandingsData.promociones,
+                        borderColor: '#FF5630',
+                        backgroundColor: 'rgba(255, 86, 48, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff',
+                            font: {
+                                size: 12
+                            },
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: '#4C9AFF',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' visits';
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: 6,
+                                xMax: 6,
+                                borderColor: '#FF5630',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                label: {
+                                    content: 'Campaigns Stopped',
+                                    enabled: true,
+                                    position: 'top',
+                                    backgroundColor: 'rgba(255, 86, 48, 0.8)',
+                                    color: '#ffffff',
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff',
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Visits',
+                            color: '#ffffff',
+                            font: {
+                                size: 13
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: '#ffffff',
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+
+        // Populate tables
+        function populateTopPagesTable() {
+            const tbody = document.getElementById('topPagesTable');
+            topPages.forEach(page => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="color: #4C9AFF;">${page.page}</td>
+                    <td>${page.views.toLocaleString()}</td>
+                    <td>${page.users.toLocaleString()}</td>
+                    <td>${page.engagement.toFixed(1)}s</td>
+                    <td>${page.bounce.toFixed(2)}%</td>
+                `;
+            });
+        }
+
+        function populateTrafficSourceTable() {
+            const tbody = document.getElementById('trafficSourceTable');
+            const total = trafficSources.reduce((sum, s) => sum + s.sessions, 0);
+            trafficSources.forEach(source => {
+                const row = tbody.insertRow();
+                const percentage = ((source.sessions / total) * 100).toFixed(1);
+                row.innerHTML = `
+                    <td style="color: #4C9AFF;">${source.source}</td>
+                    <td>${source.sessions.toLocaleString()}</td>
+                    <td>${percentage}%</td>
+                `;
+            });
+        }
+
+        function populateDevicesTable() {
+            const tbody = document.getElementById('devicesTable');
+            const topDevices = [
+                {device: 'Apple (not set)', brand: 'Apple', sessions: 180000, users: 165000},
+                {device: 'Google (not set)', brand: 'Google', sessions: 18000, users: 15500},
+                {device: 'Galaxy A15 5G', brand: 'Samsung', sessions: 6200, users: 4800},
+                {device: 'Galaxy A16 5G', brand: 'Samsung', sessions: 4500, users: 3200},
+                {device: 'moto g - 2025', brand: 'Motorola', sessions: 3100, users: 2400},
+                {device: 'moto g 5G - 2024', brand: 'Motorola', sessions: 2600, users: 1900},
+                {device: 'Galaxy S24 Ultra', brand: 'Samsung', sessions: 2400, users: 1800},
+                {device: 'Galaxy A14 5G', brand: 'Samsung', sessions: 2200, users: 1700},
+                {device: 'Galaxy S25 Ultra', brand: 'Samsung', sessions: 2100, users: 1600},
+                {device: 'moto g stylus 5G - 2024', brand: 'Motorola', sessions: 1900, users: 1400}
+            ];
+            topDevices.forEach(device => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="color: #4C9AFF;">${device.device}</td>
+                    <td>${device.brand}</td>
+                    <td>${device.sessions.toLocaleString()}</td>
+                    <td>${device.users.toLocaleString()}</td>
+                `;
+            });
+        }
+
+        function populateCampaignsTable() {
+            const tbody = document.getElementById('campaignsTable');
+            topCampaigns.forEach(campaign => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="color: #4C9AFF;">${campaign.campaign}</td>
+                    <td>${campaign.sessions.toLocaleString()}</td>
+                    <td>${campaign.users.toLocaleString()}</td>
+                    <td>${campaign.conversion.toFixed(1)}%</td>
+                `;
+            });
+        }
+
+        function populateButtonClicksTable() {
+            const tbody = document.getElementById('buttonClicksTable');
+            buttonClicks.labels.forEach((label, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="color: #4C9AFF;">${label}</td>
+                    <td>${buttonClicks.users[index].toLocaleString()}</td>
+                    <td>${buttonClicks.events[index].toLocaleString()}</td>
+                `;
+            });
+        }
+
+        // Update timeline view function
+        function updateTimelineView(view) {
+            // Update button states
+            document.querySelectorAll('.chart-controls .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update chart visibility
+            timelineChart.data.datasets.forEach((dataset, index) => {
+                if (view === 'both') {
+                    dataset.hidden = false;
+                } else if (view === 'sessions') {
+                    dataset.hidden = index !== 0;
+                } else if (view === 'users') {
+                    dataset.hidden = index !== 1;
+                }
+            });
+            timelineChart.update();
+        }
+
+        // Initialize tables on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTopPagesTable();
+            populateTrafficSourceTable();
+            populateDevicesTable();
+            populateButtonClicksTable();
+            populateCampaignsTable();
+        });
+    </script>
+</body>
+</html>
