@@ -30,6 +30,7 @@
     - download (9).csv: Top pages with views, engagement, bounce rate
     - Nov 9.csv: Source/medium traffic breakdown (265 sources)
     - Nov 8.csv: Button click events (69 event types)
+    - Nov 8 (1).csv: Device models with brand, sessions, users
     - Nov 10.csv: Campaign performance data (310 campaigns)
     - download (10).csv: Daily metrics including views, events, bounce, engagement
     - Nov Paid Landing Pages Data.csv: Paid landing page sessions by date
@@ -50,6 +51,7 @@
     - Daily data from download (10).csv used for engagement/bounce trends
     - Channel data from Nov 5.csv for traffic source distribution
     - Device data from Nov 7.csv for device pie chart
+    - Device models from Nov 8 (1).csv for top devices table
     - OS data from download (8).csv for operating system distribution
     - Top pages from download (9).csv (first 100 rows read)
     - Button clicks from Nov 8.csv for interaction tracking
@@ -1013,6 +1015,20 @@
             bounce: [6.52,7.20,8.71,7.08,5.10,6.09,14.04,15.88,15.65,19.55,17.64,18.71,17.31,18.03,8.26,5.70,4.46,3.84,3.32,4.78,4.32,4.42,1.54,2.20,3.68,2.79,4.21,3.72,3.76,4.22,5.29,2.70,2.92,3.70,4.12,3.57,4.85,4.03,2.84,2.50,3.82,3.30,3.52,3.38,3.58,2.40,2.53,3.38,4.08,3.64,3.22,4.02,2.89,2.62,3.50,4.24,3.15,2.73,4.15,3.57,99.43]
         };
 
+        // Source: Nov 8 (1).csv - Device models (top 10)
+        const topDevices = [
+            {device: '(not set)', brand: 'Apple', sessions: 121309, users: 97202},
+            {device: '(not set)', brand: 'Google', sessions: 20106, users: 14776},
+            {device: 'Galaxy A15 5G', brand: 'Samsung', sessions: 5571, users: 3584},
+            {device: 'Galaxy A16 5G', brand: 'Samsung', sessions: 4188, users: 2619},
+            {device: 'moto g - 2025', brand: 'Motorola', sessions: 3456, users: 2186},
+            {device: 'moto g 5G - 2024', brand: 'Motorola', sessions: 2605, users: 1508},
+            {device: 'Galaxy S25 Ultra', brand: 'Samsung', sessions: 2423, users: 1518},
+            {device: 'Galaxy S24 Ultra', brand: 'Samsung', sessions: 2094, users: 1362},
+            {device: 'moto g stylus 5G - 2024', brand: 'Motorola', sessions: 1980, users: 1278},
+            {device: 'moto g play - 2024', brand: 'Motorola', sessions: 1820, users: 1132}
+        ];
+
         // Chart configurations
         Chart.defaults.color = '#B3BAC5';
         Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
@@ -1555,18 +1571,6 @@
 
         function populateDevicesTable() {
             const tbody = document.getElementById('devicesTable');
-            const topDevices = [
-                {device: 'Apple (not set)', brand: 'Apple', sessions: 180000, users: 165000},
-                {device: 'Google (not set)', brand: 'Google', sessions: 18000, users: 15500},
-                {device: 'Galaxy A15 5G', brand: 'Samsung', sessions: 6200, users: 4800},
-                {device: 'Galaxy A16 5G', brand: 'Samsung', sessions: 4500, users: 3200},
-                {device: 'moto g - 2025', brand: 'Motorola', sessions: 3100, users: 2400},
-                {device: 'moto g 5G - 2024', brand: 'Motorola', sessions: 2600, users: 1900},
-                {device: 'Galaxy S24 Ultra', brand: 'Samsung', sessions: 2400, users: 1800},
-                {device: 'Galaxy A14 5G', brand: 'Samsung', sessions: 2200, users: 1700},
-                {device: 'Galaxy S25 Ultra', brand: 'Samsung', sessions: 2100, users: 1600},
-                {device: 'moto g stylus 5G - 2024', brand: 'Motorola', sessions: 1900, users: 1400}
-            ];
             topDevices.forEach(device => {
                 const row = tbody.insertRow();
                 row.innerHTML = `
