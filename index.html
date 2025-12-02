@@ -32,7 +32,7 @@
     - Nov 8.csv: Button click events (69 event types)
     - Nov 8 (1).csv: Device models with brand, sessions, users
     - Nov 10.csv: Campaign performance data (310 campaigns)
-    - download (10).csv: Daily metrics including views, events, bounce, engagement
+    - download (11).csv: Daily metrics including views, events, bounce, engagement
     - Nov Paid Landing Pages Data.csv: Paid landing page sessions by date
 
     METHODOLOGY:
@@ -48,7 +48,7 @@
     - Traffic source percentages: (source sessions / total sessions) * 100
 
     DATA PROCESSING NOTES:
-    - Daily data from download (10).csv used for engagement/bounce trends
+    - Daily data from download (11).csv used for engagement/bounce trends
     - Channel data from Nov 5.csv for traffic source distribution
     - Device data from Nov 7.csv for device pie chart
     - Device models from Nov 8 (1).csv for top devices table
@@ -71,10 +71,8 @@
     - Total Users: 55,783
     - Total Views: 203,125
     - Total Events: 406,965
-    - Avg Bounce Rate: 4.7% (excluding Nov 30 anomaly)
-    - Avg Engagement Rate: 95.3%
-
-    NOTE: Nov 30 shows anomalous bounce rate (99.4%) - likely data issue
+    - Avg Bounce Rate: 3.5%
+    - Avg Engagement Rate: 96.5%
 
     QUERY LOGIC:
     - All metrics aggregated by summing daily values
@@ -1008,11 +1006,11 @@
             promociones: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         };
 
-        // Source: download (10).csv - Engagement and bounce rate data (sorted by date)
+        // Source: download (11).csv - Engagement and bounce rate data (sorted by date)
         const engagementData = {
             dates: ["Oct 1","Oct 2","Oct 3","Oct 4","Oct 5","Oct 6","Oct 7","Oct 8","Oct 9","Oct 10","Oct 11","Oct 12","Oct 13","Oct 14","Oct 15","Oct 16","Oct 17","Oct 18","Oct 19","Oct 20","Oct 21","Oct 22","Oct 23","Oct 24","Oct 25","Oct 26","Oct 27","Oct 28","Oct 29","Oct 30","Oct 31","Nov 1","Nov 2","Nov 3","Nov 4","Nov 5","Nov 6","Nov 7","Nov 8","Nov 9","Nov 10","Nov 11","Nov 12","Nov 13","Nov 14","Nov 15","Nov 16","Nov 17","Nov 18","Nov 19","Nov 20","Nov 21","Nov 22","Nov 23","Nov 24","Nov 25","Nov 26","Nov 27","Nov 28","Nov 29","Nov 30"],
-            engagement: [93.48,92.80,91.29,92.92,94.90,93.91,85.96,84.12,84.35,80.45,82.36,81.29,82.69,81.97,91.74,94.30,95.54,96.16,96.68,95.22,95.68,95.58,98.46,97.80,96.32,97.21,95.79,96.28,96.24,95.78,94.71,97.30,97.08,96.30,95.88,96.43,95.15,95.97,97.16,97.50,96.18,96.70,96.48,96.62,96.42,97.60,97.47,96.62,95.92,96.36,96.78,95.98,97.11,97.38,96.50,95.76,96.85,97.27,95.85,96.43,0.57],
-            bounce: [6.52,7.20,8.71,7.08,5.10,6.09,14.04,15.88,15.65,19.55,17.64,18.71,17.31,18.03,8.26,5.70,4.46,3.84,3.32,4.78,4.32,4.42,1.54,2.20,3.68,2.79,4.21,3.72,3.76,4.22,5.29,2.70,2.92,3.70,4.12,3.57,4.85,4.03,2.84,2.50,3.82,3.30,3.52,3.38,3.58,2.40,2.53,3.38,4.08,3.64,3.22,4.02,2.89,2.62,3.50,4.24,3.15,2.73,4.15,3.57,99.43]
+            engagement: [93.48,92.80,91.29,92.92,94.90,93.91,85.96,84.12,84.35,80.45,82.36,81.29,82.69,81.97,91.74,94.30,95.54,96.16,96.68,95.22,95.68,95.58,98.46,97.80,96.32,97.21,95.79,96.28,96.24,95.78,94.71,97.30,97.08,96.30,95.88,96.43,95.15,95.97,97.16,97.50,96.18,96.70,96.48,96.62,96.42,97.60,97.47,96.62,95.92,96.36,96.78,95.98,97.11,97.38,96.50,95.76,96.85,97.27,95.85,96.43,97.68],
+            bounce: [6.52,7.20,8.71,7.08,5.10,6.09,14.04,15.88,15.65,19.55,17.64,18.71,17.31,18.03,8.26,5.70,4.46,3.84,3.32,4.78,4.32,4.42,1.54,2.20,3.68,2.79,4.21,3.72,3.76,4.22,5.29,2.70,2.92,3.70,4.12,3.57,4.85,4.03,2.84,2.50,3.82,3.30,3.52,3.38,3.58,2.40,2.53,3.38,4.08,3.64,3.22,4.02,2.89,2.62,3.50,4.24,3.15,2.73,4.15,3.57,2.32]
         };
 
         // Source: Nov 8 (1).csv - Device models (top 10)
